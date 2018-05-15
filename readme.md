@@ -36,6 +36,8 @@ You can run the tests by calling `npm test` at your terminal window.
 [RxJSKoans] $ npm test
 ```
 
+The tests will run continuously as you change the code, so you will get immediate feedback on your changes.
+
 ## Red, Green, Refactor ##
 
 In test-driven development (TDD) the mantra has always been red: write a failing test and run it, green: make the test pass, and refactor: look at the code and see if you can make it any better.
