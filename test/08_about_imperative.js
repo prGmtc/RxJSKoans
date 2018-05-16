@@ -16,22 +16,27 @@ test('can make a decision with an if with no else', function () {
     })
     .subscribe(results.push.bind(results));
 
-  equal(__, results.join(''));
+  equal('246810', results.join(''));
 });
 
 test('can make a decision with an if with an else', function () {
   var results = [];
   Observable.range(1, 5)
     .flatMap(function (x, i) {
+      //(1,0) : Range(1,0) : []
+      //(2,1) : Just(2)
+      //(3,2) : Range (3,2) : 3,4
+      //(4,3) : Just(4)
+      //(5,4) : Range(5,4) : 5,6,7,8
       return Rx.Observable.if(
-        function () { return x % 2 === 0; },
+        function () {return x % 2 === 0; },
         Observable.just(x),
         Observable.range(x, i)
       );
     })
     .subscribe(results.push.bind(results));
 
-  equal(__, results.join(''));
+  equal('2'+'34'+'4'+'5678', results.join(''));
 });
 
 test('we can make test cases', function () {
@@ -44,10 +49,10 @@ test('we can make test cases', function () {
     'wes': Observable.just(4)
   };
 
-  Observable.just(__)
+  Observable.just('wes')
     .flatMap(function (x) {
       return Observable.case(
-        function () { return x; },
+        function () { return x; }, //predicate: case selector
         cases
       );
     })
@@ -71,7 +76,7 @@ test('we can also have a default case', function () {
       return Observable.case(
         function () { return x; },
         cases,
-        Observable.just(__)
+        Observable.just(5) //default fallback if no case found
       );
     })
     .subscribe(function (x) { result = x; });
@@ -86,7 +91,7 @@ test('while does something until proven false', function () {
   var source = Rx.Observable
     .while(
       function () { return ++i < 3 },
-      Rx.Observable.just(__)
+      Rx.Observable.just('42')
     )
     .subscribe(result.push.bind(result));
 
